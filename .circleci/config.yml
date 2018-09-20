@@ -6,13 +6,16 @@ jobs:
 
     working_directory: ~/staycircles-reactnative-expo
 
+    environment:
+      BUMP_COMMIT_DESC: "chore - bump App versions"
+
     steps:
       - checkout
       - run:
           name: Skip when app is bumped
           command: |
-            GIT_COMMIT_DESC=$(git show --pretty=format:%s $CIRCLE_SHA1)
-            [ "$GIT_COMMIT_DESC" == "Bump version" ] && circleci step halt || true
+            LAST_COMMIT_DESC=$(git show --pretty=format:%s $CIRCLE_SHA1)
+            [ "$LAST_COMMIT_DESC" == "$BUMP_COMMIT_DESC" ] && circleci step halt || true
       - run:
           name: Make sure Yarn is installed
           command: 'sudo npm install -g yarn'
@@ -35,9 +38,9 @@ jobs:
           name: Create Empty Commit
           command: |
             git config credential.helper 'cache --timeout=120'
-            git config user.email "circle@ci.bot"
-            git config user.name "CircleCI Bot"
-            git commit --allow-empty -m "Bump version"
+            git config user.email "$(git show --pretty=format:%ce $CIRCLE_SHA1)"
+            git config user.name "$(git show --pretty=format:%cn $CIRCLE_SHA1)"
+            git commit --allow-empty -m "$BUMP_COMMIT_DESC"
             git push -q https://$GITHUB_TOKEN@github.com/yaseenshaik/expo-playground-circleci.git master
 
 workflows:
