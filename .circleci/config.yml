@@ -20,12 +20,13 @@ jobs:
           name: Make sure Yarn is installed
           command: 'sudo npm install -g yarn'
       - restore_cache:
-          key: dependency-cache-{{ checksum "package.json" }}
+          keys:
+            - yarn-packages-{{ checksum "yarn.lock" }}
       - run:
           name: Install dependencies using Yarn
           command: yarn --ignore-scripts
       - save_cache:
-          key: dependency-cache-{{ checksum "package.json" }}
+          key: yarn-packages-{{ checksum "yarn.lock" }}
           paths:
             - ~/.cache/yarn
       - run:
