@@ -6,14 +6,11 @@ jobs:
 
     working_directory: ~/staycircles-reactnative-expo
 
-
-
     steps:
       - checkout
       - run:
           name: Skip when app is bumped
           command: |
-            cd $CIRCLE_WORKING_DIRECTORY
             export GIT_COMMIT_DESC=$(git log --format=oneline -n 1 $CIRCLE_SHA1)
             [ "$GIT_COMMIT_DESC" == "Bump version" ] && circleci step halt || true'
       - run:
