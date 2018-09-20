@@ -1,0 +1,34 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/node:8
+
+    working_directory: ~/staycircles-reactnative-expo
+
+    steps:
+      - checkout
+      - run:
+          name: Make sure Yarn is installed
+          command: 'sudo npm install -g yarn'
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+      - run:
+          name: Install dependencies using Yarn
+          command: yarn --ignore-scripts
+      - save_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - ~/.cache/yarn
+      - run: echo "NODE_ENV=production" >> .env
+
+workflows:
+  version: 2
+  deploy-job:
+    jobs:
+      - deploy:
+          filters:
+            branches:
+              only:
+                - master
+                - staging
