@@ -7,6 +7,9 @@ jobs:
     working_directory: ~/staycircles-reactnative-expo
 
     steps:
+      - run:
+          name: Skip when app is bumped
+          command: [ "$CIRCLE_USERNAME" == "CircleCI Bot" ] && circleci step halt || true
       - checkout
       - run:
           name: Make sure Yarn is installed
