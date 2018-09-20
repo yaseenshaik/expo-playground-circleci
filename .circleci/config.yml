@@ -22,10 +22,10 @@ jobs:
             - ~/.cache/yarn
       - run:
           name: Login to expo
-          command: yarn run exp login -u "$EXPO_USER" -p "$EXPO_PASS"
+          command: yarn run expo login -u "$EXPO_USER" -p "$EXPO_PASS"
       - run:
           name: Publish Changes
-          command: yarn run exp publish
+          command: yarn run expo publish
 
 workflows:
   version: 2
