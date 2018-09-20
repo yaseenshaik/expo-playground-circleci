@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  build:
+  publish:
     docker:
       - image: circleci/node:8
 
@@ -20,11 +20,6 @@ jobs:
           key: dependency-cache-{{ checksum "package.json" }}
           paths:
             - ~/.cache/yarn
-
-  deploy:
-    working_directory: ~/staycircles-reactnative-expo
-
-    steps:
       - run:
           name: Login to expo
           command: yarn run exp login -u "$EXPO_USER" -p "$EXPO_PASS"
@@ -34,9 +29,9 @@ jobs:
 
 workflows:
   version: 2
-  deploy-job:
+  publish-job:
     jobs:
-      - deploy:
+      - publish:
           filters:
             branches:
               only:
