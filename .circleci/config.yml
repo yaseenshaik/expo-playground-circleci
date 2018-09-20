@@ -26,6 +26,14 @@ jobs:
       - run:
           name: Publish Changes
           command: yarn run expo publish
+      - run:
+          name: Create Empty Commit
+          command: |
+            git config credential.helper 'cache --timeout=120'
+            git config user.email "circle@ci.bot"
+            git config user.name "CircleCI Bot"
+            git commit --allow-empty -m "Trigger deployment"
+            git push -q https://$GITHUB_TOKEN@github.com/yaseenshaik/expo-playground-circleci.git master
 
 workflows:
   version: 2
